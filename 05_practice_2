@@ -1,0 +1,33 @@
+unsigned int count, toggle;
+
+void setup() {
+  Serial.begin(112500); //Initialize serial port
+  while (!Serial) {
+    ; // wait for serial port to connect
+  }
+  Serial.println("Hello World!"); // 시리얼 세팅
+  pinMode(7, OUTPUT); // 7번 포트를 output으로 세팅
+  count = toggle = 0; // count와 toggle을 0으로 세팅
+  digitalWrite(7, toggle); // led를 toggle(0)으로 세팅
+  delay(1000);
+}
+
+void loop() {
+
+  for (count = 0 ;count < 11 ;count++) { //count가 0부터 시작, 5보다 작을때, count 하나씩 증가
+    Serial.println(count); // count 하나씩 증가
+    //delay(100);
+    if (toggle == 1) {
+      toggle = 0;
+    }
+    else if (toggle == 0) {
+      toggle = 1;
+    }
+    digitalWrite(7, toggle); // update LED status
+    delay(200); // 200밀리초동안 쉬기
+  }
+  while (count == 11) {;
+    toggle = 1; //infinite loop
+  }
+}
+
