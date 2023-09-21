@@ -28,6 +28,7 @@ void loop() {
   }
   while (count == 11) {;
     toggle = 1; //infinite loop
+    digitalWrite(7, toggle); // update LED status
   }
 }
 
