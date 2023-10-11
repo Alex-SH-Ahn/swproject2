@@ -58,7 +58,7 @@ void loop() {
     brightness = 255 * ((200 - distance) / 100);
     analogWrite(PIN_LED, brightness);
   } else if (distance > 200 && distance < _DIST_MAX) {
-    brightness = 255 * ((300 - distance) / 100);
+    brightness = 255 * (float abs(200 - distance) / 100);
     analogWrite(PIN_LED, brightness);
   }
 
