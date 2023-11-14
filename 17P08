@@ -13,7 +13,7 @@
 #define _DIST_MIN  100.0   // minimum distance 100mm
 #define _DIST_MAX  250.0   // maximum distance 250mm
 
-#define _EMA_ALPHA  0.7      // for EMA Filter
+#define _EMA_ALPHA  0.3      // for EMA Filter
 
 #define LOOP_INTERVAL 20   // Loop Interval (unit: msec)
 
@@ -51,20 +51,28 @@ void loop()
   // and turn on LED if the distance is in the range 
   dist_prev = dist_raw;
 
-  if (dist_raw < _DIST_MIN || dist_raw > _DIST_MAX) {
-    digitalWrite(PIN_LED, LOW); // LED OFF
-  } else if (dist_raw >= _DIST_MIN && dist_raw <= _DIST_MAX) {
-    digitalWrite(PIN_LED, HIGH); // LED ON
+  if (dist_raw < _DIST_MIN) {
+    dist_raw = _DIST_MIN - 50;
+  } else if (dist_raw > _DIST_MAX) {
+    dist_raw = _DIST_MAX + 50;
   }
 
+  if (dist_ema < _DIST_MIN || dist_ema > _DIST_MAX) {
+    digitalWrite(PIN_LED, 1); // LED OFF
+  } else if (dist_ema > _DIST_MIN && dist_ema < _DIST_MAX) {
+      digitalWrite(PIN_LED, 0); // LED ON
+  } else {
+      digitalWrite(PIN_LED, 1);
+  }
 
   if (dist_ema <= _DIST_MIN) {
-  duty = _DUTY_MIN;
+      duty = _DUTY_MIN;
   } else if (dist_ema >= _DIST_MAX) {
-    duty = _DUTY_MAX;
+      duty = _DUTY_MAX;
   } else if (dist_ema > _DIST_MIN && dist_ema < _DIST_MAX) {
-    duty = (2000 * (dist_ema - _DIST_MIN) / (_DIST_MAX - _DIST_MIN)) + 500;
+      duty = (2000 * (dist_ema - _DIST_MIN) / (_DIST_MAX - _DIST_MIN)) + 500;
   }
+
 
   myservo.writeMicroseconds(duty);
 
